@@ -1,3 +1,5 @@
+const prompt = require('prompt-sync')();
+
 let nameRegex = RegExp("^[A-Z]{1}[a-z]{2,}$");
 let addressRegex = RegExp("^[A-Za-z]{4,}$");
 let cityStateRegex = RegExp("^[A-Za-z]{4,}$");
@@ -36,9 +38,65 @@ class AddressBook {
         return "First Name : " + this.firstName + ", Last Name : " + this.lastName + ", Address : " + this.address + ", City : " + this.city + ", State : " + this.state + ", Zip : " + this.zip + ", Phone Number : " + this.phoneNumber + ", Email : " + this.email;
     }
 }
-try {
-let addressBook = new AddressBook("Mohan", "B", "Vijaynagar", "Bangalore", "Karnataka", "411057", "93839294848", "mohan@gmail.com");
-console.log(addressBook.toString());
-} catch(error) {
-    console.error(error);
+
+
+let addressBookArr = new Array();
+
+let getContact = () => {
+    let firstName = prompt("Enter First Name ");
+    let lastName = prompt("Enter Last Name ");
+    let address = prompt("Enter Address ");
+    let city = prompt("Enter City ");
+    let state = prompt("Enter State ");
+    let zip = prompt("Enter Zip ");
+    let phoneNumber = prompt("Enter Phone Number ");
+    let email = prompt("Enter Email ");
+    let contactInput = null;
+
+    try {
+        contactInput = new Contact(firstName, lastName, address, city, state, zip, phoneNumber, email);
+    } catch (error) {
+        console.error(error);
+    }
+    return contactInput;
+};
+
+let viewContacts = () => {
+    addressBookArr.forEach(contact => console.log(contact.toString()));
 }
+
+let addContact = (contact) => {
+    addressBookArr.push(contact);
+    console.log("Contact Added Successfully!!")
+}
+
+let editContact = () => {
+    let frstName = prompt("Enter First Name : ");
+    let lstName = prompt("Enter Lastt Name : ");
+    let index = addressBookArr.findIndex(contact => contact.firstName == frstName && contact.lastName == lstName);
+    if (index == -1)
+        console.log("Could not find the contact!!")
+    else {
+        addressBookArr[index] = getContact();
+        console.log("Contact edited successfully!!");
+    }
+}
+
+        console.log("Welcome to AddressBook Program!!");
+        let choice = 0;
+        do {
+            console.log("Choose\n1. View Contacts\n2. Add Contact\n3. Edit Contact By name\n4. Exit");
+            choice = prompt("Enter Your Choice ");
+            switch (choice) {
+                case "1": viewContacts();
+                    break;
+                case "2": addContact(getContact());
+                    break;
+                case "3": editContact();
+                    break;
+                case "4": console.log("Bye!!");
+                    break;
+                default: console.log("Invalid Choice !!");
+            }
+        
+        } while (choice != 4)
